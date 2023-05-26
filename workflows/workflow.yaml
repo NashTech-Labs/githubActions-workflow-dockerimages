@@ -1,0 +1,48 @@
+name: Build and Push Docker Image  
+
+on: 
+
+  push: 
+
+    branches: 
+
+      - main                                          # Will only be triggered if there is a commit/merge to main branch. 
+
+jobs: 
+
+  build-and-push: 
+
+    runs-on: self-hosted 
+
+    steps: 
+
+      - name: Checkout repository 
+
+        uses: actions/checkout@v2 
+
+      - name: Set up Docker 
+
+        uses: docker/setup-docker@v1                                    # Setup Docker environment 
+
+      - name: Build Docker image 
+
+        run: docker build -t image-name:tag .                  
+
+      - name: Log in to Dockerhub Repository Manager 
+
+        run: docker login  -u username -p ${{ secrets.PASSWORD }}     
+
+            					# Docker login 
+
+                                                                     # Create the secrets with respect to the registry 
+
+      - name: Push Docker image to Nexus 
+
+        run: | 
+
+          docker tag your-image-name:tag your-dockerhub-registry-url/your-repository/your-image-name:tag                                                 # Tag the image 
+
+          docker push your-dockerhub-registry-url/your-repository/your-image-name:tag  
+                                                                     # Push the image to the registry 
+
+ 
